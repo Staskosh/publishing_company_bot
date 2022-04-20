@@ -41,7 +41,7 @@ def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Help!')
 
 
-def echo(update: Update, context: CallbackContext) -> None:
+def response(update: Update, context: CallbackContext) -> None:
     project_id = env('GC_PROJECT_ID')
     user = update.effective_user
     session_id = user.id
@@ -57,7 +57,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, response))
 
     updater.start_polling()
 
