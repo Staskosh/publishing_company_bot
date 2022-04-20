@@ -52,7 +52,7 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 def main() -> None:
     tg_token = env("TG_TOKEN")
-    GOOGLE_APPLICATION_CREDENTIALS = env('GOOGLE_APPLICATION_CREDENTIALS')
+    env('GOOGLE_APPLICATION_CREDENTIALS')
     updater = Updater(tg_token)
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
