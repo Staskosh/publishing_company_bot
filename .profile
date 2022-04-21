@@ -1,0 +1,1 @@
+echo ${GOOGLE_CREDENTIALS} > /assistance-publishing-bot/google-credentials.json
