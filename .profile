@@ -1,1 +1,1 @@
-echo ${GOOGLE_CREDENTIALS} > /assistance-publishing-bot/google-credentials.json
+echo ${GOOGLE_CREDENTIALS} > /app/google-credentials.json
