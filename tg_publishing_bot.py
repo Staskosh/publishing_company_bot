@@ -1,14 +1,19 @@
 import logging
 
 from environs import Env
-from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-
 from google.cloud import dialogflow
+from telegram import ForceReply, Update
+from telegram.ext import (
+    CallbackContext,
+    CommandHandler,
+    Filters,
+    MessageHandler,
+    Updater,
+)
+
 
 env = Env()
 env.read_env()
-
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -34,7 +39,6 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         request={"session": session, "query_input": query_input}
     )
 
-
     return response.query_result
 
 
@@ -47,8 +51,14 @@ def response(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     session_id = user.id
     language_code = env('LANGUAGE_CODE')
-    reply = detect_intent_texts(project_id, session_id, update.message.text, language_code)
-    update.message.reply_text(reply)
+    dialogflow_response = detect_intent_texts(
+        project_id,
+        session_id,
+        update.message.text,
+        language_code
+    )
+    if not dialogflow_response.intent.is_fallback:
+        update.message.reply_text(dialogflow_response.fulfillment_text)
 
 
 def main() -> None:
