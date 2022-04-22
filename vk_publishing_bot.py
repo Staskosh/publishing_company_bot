@@ -1,8 +1,9 @@
 import random
 
+import google
 import vk_api as vk
 from environs import Env
-from tg_publishing_bot import detect_intent_texts
+from tg_publishing_bot import detect_intent_texts, send_tg_message
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 
@@ -14,18 +15,22 @@ def response(event, vk_api):
     project_id = env('GC_PROJECT_ID')
     session_id = event.user_id
     language_code = env('LANGUAGE_CODE')
-    dialogflow_response = detect_intent_texts(
-        project_id,
-        session_id,
-        event.text,
-        language_code
-    )
-    if not dialogflow_response.intent.is_fallback:
-        vk_api.messages.send(
-            user_id=event.user_id,
-            message=dialogflow_response.fulfillment_text,
-            random_id=random.randint(1, 1000)
+    try:
+        dialogflow_response = detect_intent_texts(
+            project_id,
+            session_id,
+            event.text,
+            language_code
         )
+        if not dialogflow_response.intent.is_fallback:
+            vk_api.messages.send(
+                user_id=event.user_id,
+                message=dialogflow_response.fulfillment_text,
+                random_id=random.randint(1, 1000)
+            )
+    except google.auth.exceptions.DefaultCredentialsError as e:
+        send_tg_message(e)
+        pass
 
 
 def main() -> None:
