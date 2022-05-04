@@ -3,7 +3,9 @@ import random
 import google
 import vk_api as vk
 from environs import Env
-from tg_publishing_bot import detect_intent_texts, send_tg_message
+
+from dialogflow_api import detect_intent_texts
+from tg_publishing_bot import send_tg_message
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 

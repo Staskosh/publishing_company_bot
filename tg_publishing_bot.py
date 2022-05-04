@@ -4,7 +4,6 @@ import environs
 import google
 import telegram
 from environs import Env
-from google.cloud import dialogflow
 from telegram import ForceReply, Update
 from telegram.ext import (
     CallbackContext,
@@ -14,6 +13,7 @@ from telegram.ext import (
     Updater,
 )
 
+from dialogflow_api import detect_intent_texts
 
 env = Env()
 env.read_env()
@@ -39,18 +39,6 @@ def start(update: Update, context: CallbackContext) -> None:
         fr'Здравствуйте {user.mention_markdown_v2()}\!',
         reply_markup=ForceReply(selective=True),
     )
-
-
-def detect_intent_texts(project_id, session_id, texts, language_code):
-    session_client = dialogflow.SessionsClient()
-    session = session_client.session_path(project_id, session_id)
-    text_input = dialogflow.TextInput(text=texts, language_code=language_code)
-    query_input = dialogflow.QueryInput(text=text_input)
-    response = session_client.detect_intent(
-        request={"session": session, "query_input": query_input}
-    )
-
-    return response.query_result
 
 
 def response(update: Update, context: CallbackContext) -> None:
