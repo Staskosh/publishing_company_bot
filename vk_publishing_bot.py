@@ -30,7 +30,6 @@ def response(event, vk_api):
             )
     except google.auth.exceptions.DefaultCredentialsError as e:
         send_tg_message(e)
-        pass
 
 
 def main() -> None:

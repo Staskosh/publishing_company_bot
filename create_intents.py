@@ -27,7 +27,6 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 
 
 def main() -> None:
-    env('GOOGLE_APPLICATION_CREDENTIALS')
     project_id = env('GC_PROJECT_ID')
     url = env('FILE_URL')
     response = requests.get(url)

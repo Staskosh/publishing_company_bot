@@ -53,10 +53,6 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     return response.query_result
 
 
-def help_command(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text('Help!')
-
-
 def response(update: Update, context: CallbackContext) -> None:
     project_id = env('GC_PROJECT_ID')
     user = update.effective_user
@@ -73,7 +69,6 @@ def response(update: Update, context: CallbackContext) -> None:
             update.message.reply_text(dialogflow_response.fulfillment_text)
     except google.auth.exceptions.DefaultCredentialsError as e:
         tg_logger.warning(e)
-        pass
 
 
 def send_tg_message(error):
@@ -97,11 +92,9 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help_command))
     try:
-        env('GOOGLE_APPLICATION_CREDENTIALS')
         dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, response))
     except environs.EnvError as e:
         tg_logger.warning(e)
-        pass
 
     updater.start_polling()
     updater.idle()
