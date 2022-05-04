@@ -4,14 +4,14 @@ import random
 import google
 import telegram
 import vk_api as vk
+from dotenv import load_dotenv
+
 from dialogflow_api import detect_intent_texts
 from environs import Env
 from tg_publishing_bot import TelegramLogsHandler
 from vk_api.longpoll import VkEventType, VkLongPoll
 
-
 env = Env()
-env.read_env()
 
 vk_logger = logging.getLogger('vk_logger')
 
@@ -38,6 +38,7 @@ def response(event, vk_api):
 
 
 def main() -> None:
+    load_dotenv()
     vk_session = vk.VkApi(token=env('VK_GROUP_TOKEN'))
     tg_token = env('TG_TOKEN')
     tg_chat_id = env('TG_LOGS_CHAT_ID')

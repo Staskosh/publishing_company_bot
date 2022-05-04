@@ -3,6 +3,8 @@ import logging
 import environs
 import google
 import telegram
+from dotenv import load_dotenv
+
 from dialogflow_api import detect_intent_texts
 from environs import Env
 from telegram import ForceReply, Update
@@ -16,7 +18,6 @@ from telegram.ext import (
 
 
 env = Env()
-env.read_env()
 
 tg_logger = logging.getLogger("tg_publishing_bot")
 
@@ -41,7 +42,7 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def response(update: Update, context: CallbackContext) -> None:
+def get_response(update: Update, context: CallbackContext) -> None:
     project_id = env('GC_PROJECT_ID')
     user = update.effective_user
     session_id = user.id
@@ -59,6 +60,7 @@ def response(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
+    load_dotenv()
     tg_token = env("TG_TOKEN")
     bot = telegram.Bot(token=tg_token)
     tg_chat_id = env('TG_LOGS_CHAT_ID')
@@ -68,7 +70,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     try:
-        dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, response))
+        dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, get_response))
     except environs.EnvError as e:
         tg_logger.warning(e)
 

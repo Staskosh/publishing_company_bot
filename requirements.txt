@@ -3,3 +3,4 @@ environs==9.5.0
 google-cloud-dialogflow==2.13.0
 requests==2.27.1
 vk_api==11.9.7
+python-dotenv==0.20.0
