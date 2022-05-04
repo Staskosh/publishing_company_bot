@@ -90,7 +90,6 @@ def main() -> None:
     updater = Updater(tg_token)
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("help", help_command))
     try:
         dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, response))
     except environs.EnvError as e:

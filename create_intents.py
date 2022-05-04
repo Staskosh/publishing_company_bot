@@ -31,9 +31,9 @@ def main() -> None:
     url = env('FILE_URL')
     response = requests.get(url)
     intents_text = response.json()
-    for display_name, frases in intents_text.items():
-        training_phrases_parts = frases['questions']
-        message_texts = [frases['answer']]
+    for display_name, phrases in intents_text.items():
+        training_phrases_parts = phrases['questions']
+        message_texts = [phrases['answer']]
         create_intent(
             project_id,
             display_name,
