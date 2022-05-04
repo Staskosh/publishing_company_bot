@@ -4,9 +4,8 @@ import random
 import google
 import telegram
 import vk_api as vk
-from environs import Env
-
 from dialogflow_api import detect_intent_texts
+from environs import Env
 from tg_publishing_bot import TelegramLogsHandler
 from vk_api.longpoll import VkEventType, VkLongPoll
 

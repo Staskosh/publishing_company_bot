@@ -3,6 +3,7 @@ import logging
 import environs
 import google
 import telegram
+from dialogflow_api import detect_intent_texts
 from environs import Env
 from telegram import ForceReply, Update
 from telegram.ext import (
@@ -13,7 +14,6 @@ from telegram.ext import (
     Updater,
 )
 
-from dialogflow_api import detect_intent_texts
 
 env = Env()
 env.read_env()
