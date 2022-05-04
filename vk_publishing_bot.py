@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 
 from dialogflow_api import detect_intent_texts
 from environs import Env
-from tg_publishing_bot import TelegramLogsHandler
 from vk_api.longpoll import VkEventType, VkLongPoll
+
+from telegram_handler import TelegramLogsHandler
+
 
 env = Env()
 
