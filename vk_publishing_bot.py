@@ -16,6 +16,7 @@ env.read_env()
 
 vk_logger = logging.getLogger('vk_logger')
 
+
 def response(event, vk_api):
     project_id = env('GC_PROJECT_ID')
     session_id = event.user_id

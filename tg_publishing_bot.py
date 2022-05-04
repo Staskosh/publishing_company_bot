@@ -53,8 +53,7 @@ def response(update: Update, context: CallbackContext) -> None:
             update.message.text,
             language_code
         )
-        if not dialogflow_response.intent.is_fallback:
-            update.message.reply_text(dialogflow_response.fulfillment_text)
+        update.message.reply_text(dialogflow_response.fulfillment_text)
     except google.auth.exceptions.DefaultCredentialsError as e:
         tg_logger.warning(e)
 
