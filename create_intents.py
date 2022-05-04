@@ -1,6 +1,9 @@
+import logging
+
 import requests
 from environs import Env
 from google.cloud import dialogflow
+
 
 env = Env()
 env.read_env()
@@ -31,17 +34,21 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 def main() -> None:
     project_id = env('GC_PROJECT_ID')
     url = env('FILE_URL')
-    response = requests.get(url)
-    intents_text = response.json()
-    for display_name, phrases in intents_text.items():
-        training_phrases_parts = phrases['questions']
-        message_texts = [phrases['answer']]
-        create_intent(
-            project_id,
-            display_name,
-            training_phrases_parts,
-            message_texts
-        )
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        intents_text = response.json()
+        for display_name, phrases in intents_text.items():
+            training_phrases_parts = phrases['questions']
+            message_texts = [phrases['answer']]
+            create_intent(
+                project_id,
+                display_name,
+                training_phrases_parts,
+                message_texts
+            )
+    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
+        logging.warning(e)
 
 
 if __name__ == '__main__':
