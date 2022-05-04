@@ -1,17 +1,20 @@
+import logging
 import random
 
 import google
+import telegram
 import vk_api as vk
 from environs import Env
 
 from dialogflow_api import detect_intent_texts
-from tg_publishing_bot import send_tg_message
+from tg_publishing_bot import TelegramLogsHandler
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 
 env = Env()
 env.read_env()
 
+vk_logger = logging.getLogger('vk_logger')
 
 def response(event, vk_api):
     project_id = env('GC_PROJECT_ID')
@@ -31,11 +34,15 @@ def response(event, vk_api):
                 random_id=random.randint(1, 1000)
             )
     except google.auth.exceptions.DefaultCredentialsError as e:
-        send_tg_message(e)
+        vk_logger.warning(e)
 
 
 def main() -> None:
     vk_session = vk.VkApi(token=env('VK_GROUP_TOKEN'))
+    tg_token = env('TG_TOKEN')
+    tg_chat_id = env('TG_LOGS_CHAT_ID')
+    bot = telegram.Bot(token=tg_token)
+    vk_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
     vk_api = vk_session.get_api()
     longpoll = VkLongPoll(vk_session)
 

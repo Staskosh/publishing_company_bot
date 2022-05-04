@@ -59,16 +59,6 @@ def response(update: Update, context: CallbackContext) -> None:
         tg_logger.warning(e)
 
 
-def send_tg_message(error):
-    tg_token = env("TG_TOKEN")
-    tg_chat_id = env('TG_LOGS_CHAT_ID')
-    bot = telegram.Bot(token=tg_token)
-    tg_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
-    tg_logger.warning(error)
-    updater = Updater(tg_token)
-    updater.idle()
-
-
 def main() -> None:
     tg_token = env("TG_TOKEN")
     bot = telegram.Bot(token=tg_token)
