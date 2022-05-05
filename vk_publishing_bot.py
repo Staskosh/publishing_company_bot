@@ -16,7 +16,7 @@ from telegram_handler import TelegramLogsHandler
 vk_logger = logging.getLogger('vk_logger')
 
 
-def response(event, vk_api):
+def get_response(event, vk_api):
     project_id = os.getenv('GC_PROJECT_ID')
     session_id = event.user_id
     language_code = os.getenv('LANGUAGE_CODE')
@@ -49,7 +49,7 @@ def main() -> None:
 
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            response(event, vk_api)
+            get_response(event, vk_api)
 
 
 if __name__ == '__main__':
