@@ -1,4 +1,5 @@
 import logging
+import os
 import random
 
 import google
@@ -7,21 +8,18 @@ import vk_api as vk
 from dotenv import load_dotenv
 
 from dialogflow_api import detect_intent_texts
-from environs import Env
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 from telegram_handler import TelegramLogsHandler
 
 
-env = Env()
-
 vk_logger = logging.getLogger('vk_logger')
 
 
 def response(event, vk_api):
-    project_id = env('GC_PROJECT_ID')
+    project_id = os.getenv('GC_PROJECT_ID')
     session_id = event.user_id
-    language_code = env('LANGUAGE_CODE')
+    language_code = os.getenv('LANGUAGE_CODE')
     try:
         dialogflow_response = detect_intent_texts(
             project_id,
@@ -41,9 +39,9 @@ def response(event, vk_api):
 
 def main() -> None:
     load_dotenv()
-    vk_session = vk.VkApi(token=env('VK_GROUP_TOKEN'))
-    tg_token = env('TG_TOKEN')
-    tg_chat_id = env('TG_LOGS_CHAT_ID')
+    vk_session = vk.VkApi(token=os.getenv('VK_GROUP_TOKEN'))
+    tg_token = os.getenv('TG_TOKEN')
+    tg_chat_id = os.getenv('TG_LOGS_CHAT_ID')
     bot = telegram.Bot(token=tg_token)
     vk_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
     vk_api = vk_session.get_api()

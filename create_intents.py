@@ -1,8 +1,8 @@
 import logging
+import os
 
 import requests
 from dotenv import load_dotenv
-from environs import Env
 from google.cloud import dialogflow
 
 
@@ -29,10 +29,9 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 
 
 def main() -> None:
-    env = Env()
     load_dotenv()
-    project_id = env('GC_PROJECT_ID')
-    url = env('FILE_URL')
+    project_id = os.getenv('GC_PROJECT_ID')
+    url = os.getenv('FILE_URL')
     try:
         response = requests.get(url)
         response.raise_for_status()

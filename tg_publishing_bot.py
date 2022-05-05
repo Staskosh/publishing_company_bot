@@ -1,4 +1,5 @@
 import logging
+import os
 
 import environs
 import google
@@ -6,7 +7,6 @@ import telegram
 from dotenv import load_dotenv
 
 from dialogflow_api import detect_intent_texts
-from environs import Env
 from telegram import ForceReply, Update
 from telegram.ext import (
     CallbackContext,
@@ -18,8 +18,6 @@ from telegram.ext import (
 
 from telegram_handler import TelegramLogsHandler
 
-
-env = Env()
 
 tg_logger = logging.getLogger("tg_publishing_bot")
 
@@ -33,10 +31,10 @@ def start(update: Update, context: CallbackContext) -> None:
 
 
 def get_response(update: Update, context: CallbackContext) -> None:
-    project_id = env('GC_PROJECT_ID')
+    project_id = os.getenv('GC_PROJECT_ID')
     user = update.effective_user
     session_id = user.id
-    language_code = env('LANGUAGE_CODE')
+    language_code = os.getenv('LANGUAGE_CODE')
     try:
         dialogflow_response = detect_intent_texts(
             project_id,
@@ -51,9 +49,9 @@ def get_response(update: Update, context: CallbackContext) -> None:
 
 def main() -> None:
     load_dotenv()
-    tg_token = env("TG_TOKEN")
+    tg_token = os.getenv("TG_TOKEN")
     bot = telegram.Bot(token=tg_token)
-    tg_chat_id = env('TG_LOGS_CHAT_ID')
+    tg_chat_id = os.getenv('TG_LOGS_CHAT_ID')
     tg_logger.setLevel(logging.INFO)
     tg_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
     updater = Updater(tg_token)
